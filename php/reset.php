@@ -1,5 +1,5 @@
 <?php
-require 'config.phplib'; //
+require 'config.phplib'; 
 ?>
 <html>
 <head>
