@@ -16,7 +16,7 @@ if (array_key_exists('action', $_REQUEST) &&
 	$conn = pg_connect('user='.$CONFIG['username'].
 		' dbname='.$CONFIG['database']);
 	$res = pg_query($conn, "DELETE FROM customers WHERE 
-		customerid=$1, " array($_REQUEST['custid']) /*'".$_REQUEST['custid']."'*/"); // SQL parameter binding
+		customerid=$1, " array($_REQUEST['custid']) /*'".$_REQUEST['custid']."'*/"); /*SQL parameter binding*/
 	if ($res === False) {
 		$msg = "Unable to remove customer";
 	}
@@ -36,7 +36,7 @@ else if (array_key_exists('custid', $_REQUEST) &&
 				$_REQUEST['customerid'], 
 				$_REQUEST['customername'],
 				$_REQUEST['creditlimit'],
-				$_REQUEST['taxid']));          // SQL parameter binding
+				$_REQUEST['taxid']));          /*SQL parameter binding*/
 	                      //pg_free_result($res);
 			      //pg_close($conn);
 	if ($res === False) {
