@@ -32,7 +32,7 @@ else if (array_key_exists('custid', $_REQUEST) &&
 	$res = pg_query($conn, "INSERT INTO customers
 		(customerid, customername, creditlimit, taxid)
 		VALUES	
-		($1, $2, $3, $4) ,array(
+		($1, $2, $3, $4)", array(
 				$_REQUEST['customerid'], 
 				$_REQUEST['customername'],
 				$_REQUEST['creditlimit'],
