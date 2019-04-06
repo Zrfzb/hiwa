@@ -21,7 +21,7 @@ if (array_key_exists('action', $_REQUEST)) {
 			$res = pg_query_params($conn, "INSERT INTO lineitems
 			(orderid, productid, numprods, prodprice)
 			VALUES
-			($1, $2, $3, $4)", array(
+			($1, $2, $3, $4)", array(             // SQL parameter binding
 				$_REQUEST['orderid'], 
 				$_REQUEST['productid'],
 				$_REQUEST['amount'],
@@ -35,7 +35,7 @@ if (array_key_exists('action', $_REQUEST)) {
 				" dbname=".$CONFIG['database']);
 			$res = pg_query_params($conn, "DELETE FROM lineitems
 				WHERE orderid=$1
-			 	AND productid=$2", array(
+			 	AND productid=$2", array(    // SQL parameter binding
 				$_REQUEST['orderid'], 
 				$_REQUEST['prodcode']));
 			pg_free_result($res);
@@ -65,7 +65,7 @@ $res = pg_query_params($conn, "SELECT *
 	FROM orders, customers
 	WHERE orders.customerid = customers.customerid
 	AND orderid=$1
-	ORDER BY orderid DESC", array($_REQUEST['orderid']));
+	ORDER BY orderid DESC", array($_REQUEST['orderid']));    // SQL parameter binding
 	if (pg_num_rows($res) == 0) {
 		echo '<div class="err">Invalid order number</div>';
 		exit();
@@ -110,7 +110,7 @@ $res = pg_query_params($conn, "SELECT *
 	FROM lineitems, products
 	WHERE orderid = $1
 	AND   lineitems.productid = products.productid
-	ORDER BY lineitems.productid", array($_REQUEST['orderid']));
+	ORDER BY lineitems.productid", array($_REQUEST['orderid']));   // SQL parameter binding
 while (($row = pg_fetch_assoc($res)) !== false) {
 	$subtotal=$row['prodprice'] * $row['numprods'];
 	$total += $subtotal;
