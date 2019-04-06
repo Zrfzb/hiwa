@@ -16,7 +16,7 @@ if (array_key_exists('action', $_REQUEST) && array_key_exists('prodid', $_REQUES
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
 		$res = pg_query($conn, "DELETE FROM products WHERE 
-			productid='".$_REQUEST['prodid']."'");
+			productid=$1, ", array($_REQUEST['prodid'])     /*'".$_REQUEST['prodid']."'"*/);  // SQL parameter binding
 		if ($res === FALSE) {
 			$msg = "Unable to remove customer";
 		}
@@ -24,8 +24,8 @@ if (array_key_exists('action', $_REQUEST) && array_key_exists('prodid', $_REQUES
 		$nextAction = "update";
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
-		$res = pg_query("select productid,productname,productdescr,msrp,imageurl from products where productid='".
-			$_REQUEST['prodid']."'");
+		$res = pg_query("select productid,productname,productdescr,msrp,imageurl from products where productid=$1 ", array($_REQUEST['prodid'])/*'".
+			$_REQUEST['prodid']."'"*/);    // SQL parameter binding
 		$cache = pg_fetch_assoc($res);
 		pg_free_result($res);
 		pg_close($conn);
