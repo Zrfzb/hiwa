@@ -17,7 +17,7 @@ $res = pg_query_params($conn, "INSERT INTO orders
 	VALUES ($1, $2, $3)", array( 
 		$_REQUEST['orderid'], 
 		$_REQUEST['custid'],
-		$_REQUEST['status'] ) );
+		$_REQUEST['status'] ) );   //SQL parameter binding
 pg_free_result($res);
 pg_close($conn);	
 }
