@@ -32,10 +32,13 @@ else if (array_key_exists('custid', $_REQUEST) &&
 	$res = pg_query($conn, "INSERT INTO customers
 		(customerid, customername, creditlimit, taxid)
 		VALUES	
-		('".$_REQUEST['custid']."', '".
-		    $_REQUEST['custname']."', ".
-		    $_REQUEST['limit'].", '".
-		    $_REQUEST['taxid']."')");
+		 ($1, $2, $3, $4)"," array(     // SQL parameter binding
+		      $_REQUEST['custid'],
+		      $_REQUEST['custname'], 
+		      $_REQUEST['limit'],
+		      $_REQUEST['taxid']));
+		    pg_free_result($res);
+		    pg_close($conn);
 	if ($res === False) {
 		$msg="Unable to create customer.";
 	}
