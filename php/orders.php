@@ -14,10 +14,11 @@ if (array_key_exists('a', $_REQUEST)) {
 $conn = pg_connect("user=".$CONFIG['username']." dbname=".$CONFIG['database']);
 $res = pg_query_params($conn, "INSERT INTO orders
 	(orderid, customerid, status)
-	VALUES ($1, $2, $3)", array( 
+	VALUES 
+	($1, $2, $3) ", array(              //SQL parameter binding
 		$_REQUEST['orderid'], 
 		$_REQUEST['custid'],
-		$_REQUEST['status'] ) );   //SQL parameter binding
+		$_REQUEST['status']) );   
 pg_free_result($res);
 pg_close($conn);	
 }
