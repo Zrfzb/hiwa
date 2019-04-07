@@ -13,7 +13,8 @@ require 'config.phplib';
 if (array_key_exists("username", $_POST)) {
 
 	if (array_key_exists("confirmed", $_POST)) {
-		print($_POST['confirmed']);                        // XSS output sanitation
+		print($_POST['confirmed']);                        /* XSS output sanitation. It means a developer must remove HTML control characters
+                                                                      from the text prior to sending it to the browser.*/
 		if ($_POST['confirmed'] == "on") {
 			print("<p>A password reset link has been emailed to $_POST[username] </p>");  // XSS output sanitation
 			print("<p>If you did not receive an email in a few minutes, please check your Spam folder.</p>");
