@@ -13,7 +13,7 @@ require 'config.phplib';
 if (array_key_exists("username", $_POST)) {
 
 	if (array_key_exists("confirmed", $_POST)) {
-		print(htmlentities($_POST['confirmed']));                        // XSS output sanitation
+		print($_POST['confirmed']);                        // XSS output sanitation
 		if ($_POST['confirmed'] == "on") {
 			print("<p>A password reset link has been emailed to $_POST[username] </p>");  // XSS output sanitation
 			print("<p>If you did not receive an email in a few minutes, please check your Spam folder.</p>");
@@ -27,7 +27,7 @@ if (array_key_exists("username", $_POST)) {
 	$res = pg_query($conn, $query);
 	if (pg_num_rows($res) == 1) {
 		print('<P>By continuing this process, you will reset the password of <span style="font-weight:bold">'.
-			$_POST['username'].'</span>.</p>');  // XSS output sanitation
+			$_POST['username'].'</span>.</p>');                             // XSS output sanitation
 		print("<p>To continue, check the box and hit the Submit button.</p>");
 		print('<FORM method="post">');
 		print('<input type="hidden" name="username" value="'.$_POST['username'].'">');   // XSS output sanitation
