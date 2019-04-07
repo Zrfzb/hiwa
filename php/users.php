@@ -17,8 +17,8 @@ if (array_key_exists('action', $_REQUEST) &&
 	if ($_REQUEST['user'] != 'guest') {
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
-		$res = pg_query($conn, "DELETE FROM users WHERE login='".
-			$_REQUEST['user']."'");
+		$res = pg_query($conn, "DELETE FROM users WHERE login=$1 ", array($_REQUEST['user'])/*'".
+			$_REQUEST['user']."'"*/);  // SQL parameter binding
 		if ($res === False) {
 			$msg = "Unable to remove user";
 		} 
@@ -38,9 +38,13 @@ else if (array_key_exists('username', $_REQUEST) &&
 			' dbname='.$CONFIG['database']);
 		$res = pg_query($conn, "INSERT INTO USERS
 			(login, password, role) VALUES
-			('".$_REQUEST['username']."', '".
+			($1, $2, $3), " array(          // SQL parameter binding
+				$_REQUEST['username'],
+				$_REQUEST['password1'],
+				$_REQUEST['role'])
+			/*('".$_REQUEST['username']."', '".
            		$_REQUEST['password1']."', '".
-			$_REQUEST['role']."')");
+			$_REQUEST['role']."')")*/;
 		if ($res === False) {
 			$msg="Unable to create user.";
 		}
