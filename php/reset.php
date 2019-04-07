@@ -13,28 +13,29 @@ require 'config.phplib';
 if (array_key_exists("username", $_POST)) {
 
 	if (array_key_exists("confirmed", $_POST)) {
-		print($_POST['confirmed']);
+		print(htmlentities($_POST['confirmed']));                        // XSS output sanitation
 		if ($_POST['confirmed'] == "on") {
-			print("<p>A password reset link has been emailed to $_POST[username].</p>");
+			print("<p>A password reset link has been emailed to $_POST[username] </p>");  // XSS output sanitation
 			print("<p>If you did not receive an email in a few minutes, please check your Spam folder.</p>");
 			exit();
 		}
 	}
 
-	$query = "select role from users where login='$_POST[username]'";
+	$query = "select role from users where login=$1," array($_POST[username]) /*'$_POST[username]'*/; // SQL parameter binding
 	$conn = pg_connect('user='.$CONFIG['username'].
 		' dbname='.$CONFIG['database']);
 	$res = pg_query($conn, $query);
 	if (pg_num_rows($res) == 1) {
 		print('<P>By continuing this process, you will reset the password of <span style="font-weight:bold">'.
-			$_POST['username'].'</span>.</p>');
+			$_POST['username'].'</span>.</p>');  // XSS output sanitation
 		print("<p>To continue, check the box and hit the Submit button.</p>");
 		print('<FORM method="post">');
-		print('<input type="hidden" name="username" value="'.$_POST['username'].'">');
+		print('<input type="hidden" name="username" value="'.$_POST['username'].'">');   // XSS output sanitation
 		print('<input type="checkbox" name="confirmed">');
 		print('<input type="submit">');
 		print('</form>');
 		exit();
+	
 	} else {
 		print('Invalid login!');
 	}
