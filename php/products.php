@@ -16,7 +16,7 @@ if (array_key_exists('action', $_REQUEST) && array_key_exists('prodid', $_REQUES
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
 		$res = pg_query($conn, "DELETE FROM products WHERE 
-			productid=$1, ", array($_REQUEST['prodid'])     /*'".$_REQUEST['prodid']."'"*/);  // SQL parameter binding
+			productid=$1," array($_REQUEST['prodid'])     /*'".$_REQUEST['prodid']."'"*/);  // SQL parameter binding
 		if ($res === FALSE) {
 			$msg = "Unable to remove customer";
 		}
@@ -24,7 +24,7 @@ if (array_key_exists('action', $_REQUEST) && array_key_exists('prodid', $_REQUES
 		$nextAction = "update";
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
-		$res = pg_query("select productid,productname,productdescr,msrp,imageurl from products where productid=$1 ", array($_REQUEST['prodid'])/*'".
+		$res = pg_query("select productid,productname,productdescr,msrp,imageurl from products where productid=$1", array($_REQUEST['prodid'])/*'".
 			$_REQUEST['prodid']."'"*/);    // SQL parameter binding
 		$cache = pg_fetch_assoc($res);
 		pg_free_result($res);
@@ -48,11 +48,17 @@ if (array_key_exists("a", $_REQUEST)) {
 		$res = pg_query($conn, "INSERT INTO products
 			(productid, productname, productdescr, msrp, imageurl)
 			VALUES
-			('".$_REQUEST['prodid']."', '".
+			($1, $2, $3, $4, $5)", array(               // SQL parameter binding
+				$_REQUEST['prodid'],
+				$_REQUEST['prodname'],
+				$_REQUEST['proddesc'],
+			        $_REQUEST['msrp'],
+			        $imgname)
+			/*('".$_REQUEST['prodid']."', '".
 			$_REQUEST['prodname']."', ".
 			"'".$_REQUEST['proddesc']."', ".
 			$_REQUEST['msrp'].", ".
-			"'".$imgname."');");
+			"'".$imgname."');"*/);
 		if ($res === FALSE) {
 			$msg="Unable to create product.";
 		}
@@ -66,7 +72,7 @@ if (array_key_exists("a", $_REQUEST)) {
 		}
 		$conn = pg_connect('user='.$CONFIG['username'].
 			' dbname='.$CONFIG['database']);
-		$res = pg_query($conn, "update products ".
+		$res = pg_query($conn, "update products ".             // SQL parameter binding
 			"set productname='".$_REQUEST['prodname']."',".
 			"    productdescr='".$_REQUEST['proddesc']."',".
 			"    msrp=".$_REQUEST['msrp'].",".
