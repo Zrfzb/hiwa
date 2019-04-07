@@ -1,4 +1,5 @@
 <?php
+  // This should be a fixed file. It could be a sample. 
 require 'config.phplib';
 
 $msg="";
